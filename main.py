@@ -18,44 +18,45 @@
 ###############################################################################
 
 ###############################################################################
-#    TO DO (LastEdited 2023-04-12):                                                                   #
-#    * Make this program Screenreader accessible (move to wxWidgets)          #
+#    TO DO (LastEdited 2023-04-12):                                           #
+#    * Make this program Screenreader accessible (migrate to wxWidgets?)      #
 #    * Make opening and creating .brf files easier                            #
+#    * Verify this project works with Python 3.9-3.12                         #
 ###############################################################################
-import tkinter as tk
-import tkinter.scrolledtext
-from tkinter import simpledialog, messagebox
-from tkinter.filedialog import asksaveasfile
-from tkinter.filedialog import askopenfilename
-from tkinter import Menu
-import tkinter.scrolledtext as scrolledtext
+
 import random
+import tkinter as tk
+import tkinter.scrolledtext as scrolledtext
+from tkinter import simpledialog, messagebox, Menu
+from tkinter.filedialog import asksaveasfile, askopenfilename
 
 colorList = [
-    '#EFD6C0', 
-    '#F1F0E2', 
-    '#EEE78E', 
-    '#8896C6', 
-    '#6BCD9C', 
-    '#E0C7D7', 
-    '#FF8C55', 
+    '#EFD6C0',
+    '#F1F0E2',
+    '#EEE78E',
+    '#8896C6',
+    '#6BCD9C',
+    '#E0C7D7',
+    '#FF8C55',
     '#BFCAD6'
     ]
 
-class Root(tk.Tk):
+class Root(
+    tk.Tk
+    ):
     def __init__(
-        self, 
-        *args, 
+        self,
+        *args,
         **kwargs
         ):
         super(
-            Root, 
+            Root,
             self
             ).__init__(
-                *args, 
+                *args,
                 **kwargs
                 )
-        self.option_add('*Dialog.msg.font', 'JetBrains Mono NL')
+
         self.geometry(
             '1175x950+20+20'
             )
@@ -63,7 +64,7 @@ class Root(tk.Tk):
             "Six-Key Braille Input"
             )
         self.config(
-            bg=random.choice(
+            bg = random.choice(
                 colorList
                 )
             )
@@ -75,125 +76,132 @@ class Root(tk.Tk):
         self.create_widgets()
         self.create_menus()
         self.bind(
-            "<KeyPress>", 
+            "<KeyPress>",
             self.hold_key
             )
         self.bind(
-            "<KeyRelease>", 
+            "<KeyRelease>",
             self.key_combine
             )
         self.bind(
-            "<space>", 
+            "<space>",
             self.space_bar
             )
         self.bind(
-            "<BackSpace>", 
+            "<BackSpace>",
             self.backspace
             )
         self.bind(
-            "<Return>", 
+            "<Return>",
             self.new_line
             )
 
-    def create_menus(self):
+    def create_menus(
+        self
+        ):
         self.menubar = Menu()
         self.filemenu = Menu(
-            self.menubar, 
-            tearoff=0
+            self.menubar,
+            tearoff = 0
             )
         self.helpmenu = Menu(
-            self.menubar, 
-            tearoff=0
+            self.menubar,
+            tearoff = 0
             )
         self.menubar.add_cascade(
-            label='File', 
-            menu=self.filemenu
+            label = 'File',
+            menu = self.filemenu
             )
         self.menubar.add_cascade(
-            label='Help', 
-            menu=self.helpmenu
+            label = 'Help',
+            menu = self.helpmenu
             )
         self.filemenu.add_command(
-            label="Save", 
+            label = "Save",
             command = self.save_file
             )        
         self.filemenu.add_separator()
         self.filemenu.add_command(
-            label="Exit", 
+            label = "Exit",
             command = self.destroy
             )
         self.helpmenu.add_command(
-            label='About', 
+            label = 'About',
             command = self.about
             )
         self.helpmenu.add_command(
-            label='Help', 
+            label = 'Help',
             command = self.help
             )
         self.config(
-            menu=self.menubar
+            menu = self.menubar
             )
 
-    def create_widgets(self):
+    def create_widgets(
+        self
+        ):
         self.main_frame = tk.Frame(
-            self, 
-            bg=random.choice(
+            self,
+            bg = random.choice(
                 colorList
                 )
             )
         self.main_frame.grid(
-            column=0, 
-            row=0, 
-            padx=100, 
-            pady=10
+            column = 0,
+            row = 0,
+            padx = 100,
+            pady = 10
             )
         self.input_area = scrolledtext.ScrolledText(
-            self.main_frame, 
-            height=25, 
-            width=48, 
-            bg="#FFEBEE", 
+            self.main_frame,
+            height = 25,
+            width = 48,
+            bg = "#FFEBEE",
             cursor = "cross red",
-            wrap='word'
+            wrap = 'word'
             )
         self.input_area.grid(
-            column=0, 
-            row=6, 
-            columnspan=3,
+            column = 0,
+            row = 6,
+            columnspan = 3,
             sticky = tk.N
             )
         self.input_area.config(
-            font=(
-                "JetBrains Mono NL", 
+            font = (
+                "JetBrains Mono NL",
                 24
-                ), 
-            state="disabled"
+                ),
+            state = "disabled"
             )
 
         self.label2 = tk.Label(
-            self.main_frame, 
-            text = f"Line 0, Column 0\n---------------------------------------\nUS Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns"
-
+            self.main_frame,
+            text = f'''Line 0, Column 0
+---------------------------------------
+US Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns'''
             )
         self.label2.config(
-            font=(
-                "JetBrains Mono NL", 
-                18, 
+            font = (
+                "JetBrains Mono NL",
+                18,
                 "bold"
-                ), 
-            bg="navy", 
-            fg="yellow"
+                ),
+            bg = "blue",
+            fg = "yellow"
             )
         self.label2.grid(
-            column=0, 
-            row=4, 
-            rowspan=2,
-            columnspan=3,
+            column = 0,
+            row = 4,
+            rowspan = 2,
+            columnspan = 3,
             sticky = tk.N
             )
         self.input_area.focus_set()
 
     @staticmethod
-    def hold_key(event):
+    def hold_key(
+        event
+        ):
         try:
             if hold_key_list.index(
                 event.keysym
@@ -206,7 +214,8 @@ class Root(tk.Tk):
                 )
 
     def key_combine(
-        self, event
+        self,
+        event
         ):
         word = "".join(
             sorted(
@@ -214,7 +223,6 @@ class Root(tk.Tk):
                 )
             )
         lower_caps = word.lower()
-        # print(lower_caps)
         if lower_caps in letter_combination_mapping:
             output = letter_combination_mapping.get(
                 lower_caps
@@ -227,18 +235,18 @@ class Root(tk.Tk):
         pass
 
     def backspace(
-        self, 
+        self,
         event
         ):
         self.input_area.config(
-            state="normal"
+            state = "normal"
             )
         self.input_area.delete(
-            "insert -1 chars", 
+            "insert -1 chars",
             "insert"
             )
         self.input_area.config(
-            state='disabled'
+            state = 'disabled'
             )
         curr = self.input_area.index(
             tkinter.INSERT
@@ -250,16 +258,17 @@ class Root(tk.Tk):
         new_label_split = new_label_raw.split(
             "."
             )
-        new_label = f"Line {new_label_split[0]}, Column {new_label_split[1]}\n---------------------------------------\nUS Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns"
+        new_label = f'''Line {new_label_split[0]}, Column {new_label_split[1]}
+---------------------------------------
+US Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns'''
         self.label2['text'] = new_label
-        
 
     def space_bar(
-        self, 
+        self,
         event
         ):
         self.display(
-            event="\u2800"
+            event = "\u2800"
             )
         curr = self.input_area.index(
             tkinter.INSERT
@@ -271,12 +280,14 @@ class Root(tk.Tk):
         new_label_split = new_label_raw.split(
             "."
             )
-        new_label = f"Line {new_label_split[0]}, Column {new_label_split[1]}\n---------------------------------------\nUS Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns"
+        new_label = f"""Line {new_label_split[0]}, Column {new_label_split[1]}
+---------------------------------------
+US Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns"""
         self.label2['text'] = new_label
-        
 
     def new_line(
-        self, event
+        self,
+        event
         ):
         self.display(
             event="\n"
@@ -291,7 +302,9 @@ class Root(tk.Tk):
         new_label_split = new_label_raw.split(
             "."
             )
-        new_label = f"Line {new_label_split[0]}, Column {new_label_split[1]}\n---------------------------------------\nUS Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns"
+        new_label = f"""Line {new_label_split[0]}, Column {new_label_split[1]}
+---------------------------------------
+US Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns"""
         self.label2['text'] = new_label
 
     def save_file(
@@ -312,19 +325,19 @@ class Root(tk.Tk):
             )
         ]
         filename = asksaveasfile(
-            filetypes = files, 
+            filetypes = files,
             defaultextension = files
             )
 
     def display(
-        self, 
+        self,
         event
         ):
         self.input_area.config(
-            state="normal"
+            state = "normal"
             )
         self.input_area.insert(
-            'end', 
+            'end',
             event
             )
         self.input_area.yview(
@@ -343,7 +356,9 @@ class Root(tk.Tk):
         new_label_split = new_label_raw.split(
             "."
             )
-        new_label = f"Line {new_label_split[0]}, Column {new_label_split[1]}\n---------------------------------------\nUS Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns"
+        new_label = f"""Line {new_label_split[0]}, Column {new_label_split[1]}
+---------------------------------------
+US Letter = 25 Lines, 32 columns | US Braille = 25 Lines, 40 columns"""
         self.label2['text'] = new_label
         hold_key_list.clear()
 
@@ -351,14 +366,19 @@ class Root(tk.Tk):
         event
         ):
         tkinter.messagebox.showinfo(
-            title='About', 
+            title = 'About',
             message = '''
+            
             Six Key Braille Input GUI
+            
             --------------------------------------------
+            
             Copyright © 2023 Michael Ryan Hunsaker, M.Ed., Ph.D.
             Davis School District
             hunsakerconsulting@gmail.com
+            
             --------------------------------------------
+            
             Source code available at:
             https://github.com/mrhunsaker/BrailleSixKey
             
@@ -369,35 +389,37 @@ class Root(tk.Tk):
         event
         ):
         tkinter.messagebox.showinfo(
-            title='Help', 
+            title = 'Help',
             message = '''
+            
             This program uses the SDF JKL keys to generate 
             formatted unicode braille.
+            
             --------------------------------------------
+            
             Key Mappings:
-            f = dot 1  |  j = dot 4
-            d = dot 2  |  k = dot 5
-            s = dot 3  |  l = dot 6
+            f = dot 1    |  j = dot 4
+            d = dot 2   |  k = dot 5
+            s = dot 3   |  l = dot 6
             
             <space> adds a single Unicode Space
             <Backspace> deletes one Unicode Character
-            <Insert> activates a cursor to move with arrow keys
-                - There is NO braille input in this mode
-            <esc> turns the cursor off and allows braille input
+            
             --------------------------------------------
             
             '''
             )
-        
+
+
 curr = ''
 hold_key_list = []
 str(
     hold_key_list
     )
 letter_combination_mapping = {
-    "f": u'\u2801', 
-    "df": u'\u2803', 
-    "fj": u'\u2809', 
+    "f": u'\u2801',
+    "df": u'\u2803',
+    "fj": u'\u2809',
     "fjk": u'\u2819',
     "fk": u'\u2811',
     "dfj": u'\u280B',
@@ -432,7 +454,7 @@ letter_combination_mapping = {
     "dls": u'\u2826',
     "ks": u'\u2814',
     " ": u'\u2800',
-    "djls": u'\u282E', 
+    "djls": u'\u282E',
     "k": u'\u2810',
     "jkls": u'\u283C',
     "dfjl": u'\u282B',
@@ -463,3 +485,4 @@ letter_combination_mapping = {
 
 if __name__ == '__main__':
     Root().mainloop()
+
