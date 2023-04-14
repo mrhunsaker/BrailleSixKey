@@ -18,9 +18,8 @@
 ###############################################################################
 
 ###############################################################################
-#    TO DO (LastEdited 2023-04-12):                                           #
+#    TO DO (LastEdited 2023-04-14):                                           #
 #    * Make this program Screenreader accessible (migrate to wxWidgets?)      #
-#    * Make opening and creating .brf files easier                            #
 #    * Verify this project works with Python 3.9-3.12                         #
 ###############################################################################
 
